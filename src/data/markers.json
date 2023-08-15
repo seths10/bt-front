@@ -1,0 +1,22 @@
+{
+  "markers": [
+    {
+      "id": 1,
+      "latitude": 5.115449,
+      "longitude": -1.290893,
+      "name": "Department of Computer Science"
+    },
+    {
+      "id": 2,
+      "latitude": 5.115592,
+      "longitude": -1.291066,
+      "name": "College of Distance Education"
+    },
+    {
+      "id": 3,
+      "latitude": 5.115729,
+      "longitude": -1.290775,
+      "name": "Department of Mathematics and Statistics"
+    }
+  ]
+}
