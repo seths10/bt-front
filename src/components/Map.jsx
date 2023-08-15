@@ -33,7 +33,7 @@ export default function Map() {
           });
           setMarkers(extractedMarkers);
         }
-        
+
         setIsLoading(false);
       })
       .catch((error) => {
@@ -47,7 +47,7 @@ export default function Map() {
   }
 
   return (
-    <div className="border border-red-900">
+    <div>
       {isLoading && (
         <div className="absolute inset-0 z-0 min-h-[85vh] flex justify-center items-center bg-[rgba(0,0,0,0.05)]">
           <Loader />

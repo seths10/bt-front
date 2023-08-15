@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const About = () => {
   return (
     <section className="max-w-7xl mx-auto">
-      <div className="mx-3">
+      <div className="mx-3 mt-5">
         <Link
           to={"/"}
           className="font-inter text-white bg-white border border-gray px-2 py-1 rounded-lg"
