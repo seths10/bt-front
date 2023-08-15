@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 package-lock.json
-package.json
+# package.json
 *.local
 .env.local
 *.env
