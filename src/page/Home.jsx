@@ -2,10 +2,10 @@ import { useState } from "react";
 import { Map } from "../components";
 import { Drawer } from "vaul";
 import { MdClose } from "react-icons/md";
+import { MdDirectionsBus } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const Home = () => {
-  const [selectedLocation, setSelectedLocation] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const toggleDialog = () => {
@@ -26,16 +26,12 @@ const Home = () => {
       return (
         <Link
           to={"/about"}
-          className="font-inter text-white bg-[#222328] px-3 py-1 rounded-md font-medium"
+          className="font-inter text-black bg-white px-3 py-1 rounded-md font-medium"
         >
           About
         </Link>
       );
     }
-  };
-
-  const handleSelectLocation = (location) => {
-    setSelectedLocation(location);
   };
 
   return (
@@ -69,56 +65,38 @@ const Home = () => {
               <div className="p-4 bg-white rounded-t-[10px] flex-1">
                 <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-8" />
                 <div className="max-w-md mx-auto">
-                  <Drawer.Title className="font-medium mb-4">
-                    Pick Destination
+                  <Drawer.Title className="font-medium mb-2">
+                    Nearest Shuttle
                   </Drawer.Title>
-                  
 
-                  <div>
-                    <div className="flex justify-between gap-2">
-                      <button
-                        className={`w-1/4 rounded-full bg-gray-100 text-center py-2 ${
-                          selectedLocation === "SRC"
-                            ? "text-black"
-                            : "text-gray-500"
-                        }`}
-                        onClick={() => handleSelectLocation("SRC")}
+                  <div className="w-full max-w-md p-4 bg-white border border-gray-100 rounded-lg dark:bg-gray-800 dark:border-gray-700">
+                    <div className="flow-root">
+                      <ul
+                        role="list"
+                        className="divide-y divide-gray-200 dark:divide-gray-700"
                       >
-                        <p className="text-gray-500">SRC</p>
-                      </button>
-                      <button
-                        className={`w-1/4 rounded-full bg-gray-100 text-center py-2 ${
-                          selectedLocation === "NLT"
-                            ? "text-black"
-                            : "text-gray-500"
-                        }`}
-                        onClick={() => handleSelectLocation("NLT")}
-                      >
-                        <p className="text-gray-500">NLT</p>
-                      </button>
-                      <button
-                        className={`w-1/4 rounded-full bg-gray-100 text-center py-2 ${
-                          selectedLocation === "Old Site"
-                            ? "text-black"
-                            : "text-gray-500"
-                        }`}
-                        onClick={() => handleSelectLocation("OldSite")}
-                      >
-                        <p className="text-gray-500">Old Site</p>
-                      </button>
-                      <button
-                        className={`w-1/4 rounded-full bg-gray-100 text-center py-2 ${
-                          selectedLocation === "SWLT"
-                            ? "text-black"
-                            : "text-gray-500"
-                        }`}
-                        onClick={() => handleSelectLocation("SWLT")}
-                      >
-                        <p className="text-gray-500">SWLT</p>
-                      </button>
+                        <li>
+                          <div className="flex items-center space-x-4">
+                            <div className="flex-shrink-0">
+                              <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-black text-white">
+                                <MdDirectionsBus className="w-5 h-6" />
+                              </div>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-md font-bold text-gray-900 truncate dark:text-white">
+                                Aayalolo B1
+                              </p>
+                              <p className="text-sm text-gray-400">
+                                Science Shuttle
+                              </p>
+                            </div>
+                            <div className="inline-flex border border-gray-200 rounded-full px-2 text-blue-700 items-center text-base   dark:text-white">
+                              <p className="font-s"> 5m 13s</p>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
                     </div>
-
-                    
                   </div>
                 </div>
               </div>

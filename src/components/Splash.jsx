@@ -10,8 +10,8 @@ const Splash = () => {
   return (
     <div className="preloader">
       <div className="texts-container">
-        <span>bus</span>
-        <span>tracking.</span>
+        <span className="readonly">bus</span>
+        <span className="readonly">tracking.</span>
       </div>
     </div>
   );
