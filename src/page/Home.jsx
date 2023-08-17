@@ -38,20 +38,18 @@ const Home = () => {
     setSelectedLocation(location);
   };
 
-  const handleClearSelection = () => {
-    setSelectedLocation("");
-  };
-
   return (
     <section>
       <div>
-        <div className="absolute z-50 left-5 top-5">{renderAboutLink()}</div>
+        <div className="absolute z-50 left-4 top-[1.7rem]">
+          {renderAboutLink()}
+        </div>
 
         <Map />
         <Drawer.Root shouldScaleBackground>
           <Drawer.Trigger asChild>
             <div>
-              <div className="fixed bottom-5 right-5 animate-pulse">
+              <div className="fixed bottom-9 right-3 border border-gray-200 shadow-lg rounded-full">
                 <div className="bg-white rounded-full p-3">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -74,9 +72,7 @@ const Home = () => {
                   <Drawer.Title className="font-medium mb-4">
                     Pick Destination
                   </Drawer.Title>
-                  <p className="text-zinc-600 mb-2">
-                    Lorem ipsum dolor sit amet.
-                  </p>
+                  
 
                   <div>
                     <div className="flex justify-between gap-2">
@@ -122,22 +118,17 @@ const Home = () => {
                       </button>
                     </div>
 
-                    <div className="mb-2 mt-3">
-                      <button
-                        className="text-red-500 text-xs"
-                        onClick={handleClearSelection}
-                        disabled={!selectedLocation}
-                      >
-                        Clear Selection
-                      </button>
-                    </div>
+                    
                   </div>
                 </div>
               </div>
 
               <div className="p-4 bg-zinc-100 border-t border-zinc-200 mt-auto">
                 <div className="flex gap-6 justify-end max-w-md mx-auto">
-                  <a className="text-xs text-zinc-600 flex items-center gap-0.25">
+                  <a
+                    href="https://github.com/IoTDevLab/Bus-Tracking-System-2023"
+                    className="text-xs text-zinc-600 flex items-center gap-0.25"
+                  >
                     GitHub
                     <svg
                       fill="none"
@@ -156,8 +147,11 @@ const Home = () => {
                       <path d="M10 14L21 3"></path>
                     </svg>
                   </a>
-                  <a className="text-xs text-zinc-600 flex items-center gap-0.25">
-                    Twitter
+                  <a
+                    href="#"
+                    className="text-xs text-zinc-600 flex items-center gap-0.25"
+                  >
+                    Home
                     <svg
                       fill="none"
                       height="16"

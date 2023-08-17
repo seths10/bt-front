@@ -42,6 +42,20 @@ export default function Map() {
       });
   }, []);
 
+  useEffect(() => {
+    const randomMarkers = [
+      {
+        latitude: 5.115,
+        longitude: -1.29,
+      },
+      {
+        latitude: 5.116,
+        longitude: -1.292,
+      },
+    ];
+    setMarkers((prevMarkers) => [...prevMarkers, ...randomMarkers]);
+  }, []);
+
   function handleMapLoad() {
     setIsLoading(false);
   }
@@ -68,9 +82,11 @@ export default function Map() {
           mapboxApiAccessToken="pk.eyJ1Ijoic2V0aHMxMCIsImEiOiJjbGg5ZXBodm8wNnVwM3JwZDFpZ3M5MW5iIn0.sW5drJM7yvG0z0qkiwQj-w"
           onViewportChange={(nextViewport) => setViewport({ ...nextViewport })}
           minZoom={5}
+          bearing={180}
           onLoad={handleMapLoad}
           maxZoom={30}
-          mapStyle="mapbox://styles/mapbox/streets-v12"
+          // mapStyle="mapbox://styles/mapbox/satellite-streets-v9"
+          mapStyle="mapbox://styles/mapbox/light-v11"
         >
           {markers.map((mark, index) => (
             <Marker
@@ -88,8 +104,15 @@ export default function Map() {
               </div>
             </Marker>
           ))}
-          <div className="absolute top-4 right-10 z-10">
-            <NavigationControl showCompass={false} />
+          <div className="absolute top-7 right-[2.8rem] z-10">
+            <NavigationControl
+              style={{
+                boxShadow: "0px 4px 12px 0px rgba(0, 0, 0, 0.15)",
+                overflow: "hidden",
+              }}
+              compassLabel="compass"
+              showCompass={true}
+            />
           </div>
         </ReactMapGL>
       </div>
