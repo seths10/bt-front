@@ -82,11 +82,11 @@ export default function Map() {
           mapboxApiAccessToken="pk.eyJ1Ijoic2V0aHMxMCIsImEiOiJjbGg5ZXBodm8wNnVwM3JwZDFpZ3M5MW5iIn0.sW5drJM7yvG0z0qkiwQj-w"
           onViewportChange={(nextViewport) => setViewport({ ...nextViewport })}
           minZoom={5}
-          bearing={180}
+          // bearing={180}
           onLoad={handleMapLoad}
           maxZoom={30}
-          // mapStyle="mapbox://styles/mapbox/satellite-streets-v9"
-          mapStyle="mapbox://styles/mapbox/light-v11"
+          mapStyle="mapbox://styles/mapbox/satellite-streets-v9"
+          // mapStyle="mapbox://styles/mapbox/light-v11"
         >
           {markers.map((mark, index) => (
             <Marker
