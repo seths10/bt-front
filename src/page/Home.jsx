@@ -56,16 +56,17 @@ const Home = () => {
       });
   }, []);
 
-  useEffect(() => {
-    const updateRemainingTime = () => {
-      if (remainingTime === 0) {
-        setRemainingTime(600);
-        setDeviceInfo([]);
-      } else {
-        setRemainingTime((prevTime) => prevTime - 1);
-      }
-    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const updateRemainingTime = () => {
+    if (remainingTime === 0) {
+      setRemainingTime(600);
+      setDeviceInfo([]);
+    } else {
+      setRemainingTime((prevTime) => prevTime - 1);
+    }
+  };
 
+  useEffect(() => {
     const updateIntervalId = setInterval(updateRemainingTime, 1000);
     const clearIntervalId = setInterval(() => {
       setDeviceInfo([]);
@@ -75,7 +76,7 @@ const Home = () => {
       clearInterval(updateIntervalId);
       clearInterval(clearIntervalId);
     };
-  }, [remainingTime]);
+  }, [updateRemainingTime]);
 
   const minutes = Math.floor(remainingTime / 60);
   const seconds = remainingTime % 60;
@@ -116,13 +117,13 @@ const Home = () => {
                     Nearest Shuttles
                   </Drawer.Title>
 
-                  {/* {deviceInfo?.length === 0 ? (
+                  {deviceInfo?.length === 0 ? (
                     <div className="flex w-full max-w-md px-2 py-6 mb-1 border items-center justify-center rounded-lg bg-gray-800 border-gray-700">
                       <h3 className="text-lg font-medium font-lato text-white">
                         Shuttle Unvailable, Please wait...⌛
                       </h3>
                     </div>
-                  ) : ( */}
+                  ) : (
                     <div>
                       {deviceInfo.map((item, index) => (
                         <div
@@ -159,7 +160,7 @@ const Home = () => {
                         </div>
                       ))}
                     </div>
-                  {/* )} */}
+                  )}
                 </div>
               </div>
             </Drawer.Content>
