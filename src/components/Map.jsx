@@ -7,33 +7,21 @@ import Loader from "./Loader";
 
 export default function Map() {
   const [isLoading, setIsLoading] = useState(true);
+  const [markers, setMarkers] = useState([]);
   const [viewport, setViewport] = useState({
     latitude: 5.1154645,
     longitude: -1.2908544,
+    pitch: 90,
     zoom: 16,
   });
-  const [markers, setMarkers] = useState([]);
 
   useEffect(() => {
     fetch("https://bt-server.onrender.com/payloads")
       .then((response) => response.json())
       .then((data) => {
-        if (data.length === 1) {
-          // Only one device, show the last location info and clear the markers
-          const payload = data[0];
-          const { latitude, longitude } =
-            payload.uplink_message.decoded_payload;
-          setMarkers([{ latitude, longitude }]);
-        } else {
-          // Multiple devices, show the location info from each device and clear the markers
-          const extractedMarkers = data.map((payload) => {
-            const { latitude, longitude } =
-              payload.uplink_message.decoded_payload;
-            return { latitude, longitude };
-          });
-          setMarkers(extractedMarkers);
-        }
-
+        const payload = data[data.length - 1];
+        const { latitude, longitude } = payload.uplink_message.decoded_payload;
+        setMarkers([{ latitude, longitude }]);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -41,6 +29,26 @@ export default function Map() {
         setIsLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
+      enableHighAccuracy: true,
+    });
+  }, []);
+
+  function successLocation(position) {
+    const { latitude, longitude } = position.coords;
+    setMarkers((prevMarkers) => [...prevMarkers, { latitude, longitude }]);
+    setViewport((prevViewport) => ({
+      ...prevViewport,
+      latitude,
+      longitude,
+    }));
+  }
+
+  function errorLocation(position) {
+    console.log("Error getting location:", position);
+  }
 
   function handleMapLoad() {
     setIsLoading(false);
@@ -72,6 +80,8 @@ export default function Map() {
           maxZoom={30}
           mapStyle="mapbox://styles/mapbox/satellite-streets-v9"
         >
+          
+
           {markers.map((mark, index) => (
             <Marker
               key={index}
@@ -92,7 +102,6 @@ export default function Map() {
             <NavigationControl
               style={{
                 boxShadow: "0px 4px 12px 0px rgba(0, 0, 0, 0.15)",
-                overflow: "hidden",
               }}
               showCompass={true}
             />

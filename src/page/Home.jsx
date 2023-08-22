@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Map } from "../components";
 import { Drawer } from "vaul";
-import { MdClose } from "react-icons/md";
+import { MdClose, MdLocationPin } from "react-icons/md";
 import { MdDirectionsBus } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const Home = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [deviceInfo, setDeviceInfo] = useState([]);
+  const [remainingTime, setRemainingTime] = useState(600);
 
   const toggleDialog = () => {
     setIsDialogOpen(!isDialogOpen);
@@ -34,6 +36,50 @@ const Home = () => {
     }
   };
 
+  useEffect(() => {
+    fetch("https://bt-server.onrender.com/payloads")
+      .then((response) => response.json())
+      .then((data) => {
+        const lastTwo = data.slice(-2);
+        if (
+          lastTwo.length === 2 &&
+          lastTwo[0].end_device_ids.dev_addr ===
+            lastTwo[1].end_device_ids.dev_addr
+        ) {
+          setDeviceInfo([lastTwo[0]]);
+        } else {
+          setDeviceInfo(lastTwo.reverse());
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    const updateRemainingTime = () => {
+      if (remainingTime === 0) {
+        setRemainingTime(600);
+        setDeviceInfo([]);
+      } else {
+        setRemainingTime((prevTime) => prevTime - 1);
+      }
+    };
+
+    const updateIntervalId = setInterval(updateRemainingTime, 1000);
+    const clearIntervalId = setInterval(() => {
+      setDeviceInfo([]);
+    }, 60000);
+
+    return () => {
+      clearInterval(updateIntervalId);
+      clearInterval(clearIntervalId);
+    };
+  }, [remainingTime]);
+
+  const minutes = Math.floor(remainingTime / 60);
+  const seconds = remainingTime % 60;
+
   return (
     <section>
       <div>
@@ -55,98 +101,65 @@ const Home = () => {
                   >
                     <path d="M9.999 15.333a5.333 5.333 0 110-10.666 5.333 5.333 0 010 10.666zm0-8a2.666 2.666 0 100 5.333 2.666 2.666 0 000-5.333zM10 2a8 8 0 100 16 8 8 0 000-16z" />
                   </svg>
+                  {/* <MdOutlineMap className="w-5 h-6" /> */}
                 </div>
               </div>
             </div>
           </Drawer.Trigger>
           <Drawer.Portal>
             <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-            <Drawer.Content className="bg-zinc-100 flex flex-col rounded-t-[10px] h-[40%] mt-24 fixed bottom-0 left-0 right-0">
+            <Drawer.Content className="bg-white flex flex-col overflow-auto max-h-[82vh] rounded-t-[10px] h-[40%] mt-24 fixed bottom-0 left-0 right-0">
               <div className="p-4 bg-white rounded-t-[10px] flex-1">
-                <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-8" />
+                <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-3" />
                 <div className="max-w-md mx-auto">
-                  <Drawer.Title className="font-medium mb-2">
-                    Nearest Shuttle
+                  <Drawer.Title className="font-bold mb-2">
+                    Nearest Shuttles
                   </Drawer.Title>
 
-                  <div className="w-full max-w-md p-4 bg-white border border-gray-100 rounded-lg dark:bg-gray-800 dark:border-gray-700">
-                    <div className="flow-root">
-                      <ul
-                        role="list"
-                        className="divide-y divide-gray-200 dark:divide-gray-700"
-                      >
-                        <li>
-                          <div className="flex items-center space-x-4">
-                            <div className="flex-shrink-0">
-                              <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-black text-white">
-                                <MdDirectionsBus className="w-5 h-6" />
+                  {deviceInfo?.length === 0 ? (
+                    <div className="flex w-full max-w-md px-2 py-6 mb-1 border items-center justify-center rounded-lg bg-gray-800 border-gray-700">
+                      <h3 className="text-lg font-medium font-lato text-white">
+                        Shuttle Unvailable, Please wait...⌛
+                      </h3>
+                    </div>
+                  ) : (
+                    <div>
+                      {deviceInfo.map((item, index) => (
+                        <div
+                          key={index}
+                          className="w-full max-w-md p-4 mb-1 border  rounded-lg bg-gray-800 border-gray-700"
+                        >
+                          <div className="flow-root">
+                            <div>
+                              <div className="flex items-center space-x-4">
+                                <div className="flex-shrink-0">
+                                  <div className="w-8 h-8 flex items-center justify-center rounded-lg bg-white text-black">
+                                    <MdDirectionsBus className="w-5 h-6" />
+                                  </div>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-md font-bold truncate text-white">
+                                    Shuttle {item.end_device_ids.dev_addr}
+                                  </p>
+                                  <div className="flex items-center gap-1 text-sm text-gray-400">
+                                    <MdLocationPin />
+                                    <p>Science Shuttle</p>
+                                  </div>
+                                </div>
+                                <div className="inline-flex justify-center border border-dashed border-gray-200 rounded-full px-2 text-white items-center text-base">
+                                  <p className="text-xs">ETA:</p>
+                                  <p className="font-bold text-sm ml-2">
+                                    {minutes}:
+                                    {seconds < 10 ? `0${seconds}` : seconds}
+                                  </p>
+                                </div>
                               </div>
                             </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-md font-bold text-gray-900 truncate dark:text-white">
-                                Aayalolo B1
-                              </p>
-                              <p className="text-sm text-gray-400">
-                                Science Shuttle
-                              </p>
-                            </div>
-                            <div className="inline-flex border border-gray-200 rounded-full px-2 text-blue-700 items-center text-base   dark:text-white">
-                              <p className="font-s"> 5m 13s</p>
-                            </div>
                           </div>
-                        </li>
-                      </ul>
+                        </div>
+                      ))}
                     </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-4 bg-zinc-100 border-t border-zinc-200 mt-auto">
-                <div className="flex gap-6 justify-end max-w-md mx-auto">
-                  <a
-                    href="https://github.com/IoTDevLab/Bus-Tracking-System-2023"
-                    className="text-xs text-zinc-600 flex items-center gap-0.25"
-                  >
-                    GitHub
-                    <svg
-                      fill="none"
-                      height="16"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      width="16"
-                      aria-hidden="true"
-                      className="w-3 h-3 ml-1"
-                    >
-                      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
-                      <path d="M15 3h6v6"></path>
-                      <path d="M10 14L21 3"></path>
-                    </svg>
-                  </a>
-                  <a
-                    href="#"
-                    className="text-xs text-zinc-600 flex items-center gap-0.25"
-                  >
-                    Home
-                    <svg
-                      fill="none"
-                      height="16"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      width="16"
-                      aria-hidden="true"
-                      className="w-3 h-3 ml-1"
-                    >
-                      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
-                      <path d="M15 3h6v6"></path>
-                      <path d="M10 14L21 3"></path>
-                    </svg>
-                  </a>
+                  )}
                 </div>
               </div>
             </Drawer.Content>
