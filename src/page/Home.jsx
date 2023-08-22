@@ -116,13 +116,13 @@ const Home = () => {
                     Nearest Shuttles
                   </Drawer.Title>
 
-                  {deviceInfo?.length === 0 ? (
+                  {/* {deviceInfo?.length === 0 ? (
                     <div className="flex w-full max-w-md px-2 py-6 mb-1 border items-center justify-center rounded-lg bg-gray-800 border-gray-700">
                       <h3 className="text-lg font-medium font-lato text-white">
                         Shuttle Unvailable, Please wait...⌛
                       </h3>
                     </div>
-                  ) : (
+                  ) : ( */}
                     <div>
                       {deviceInfo.map((item, index) => (
                         <div
@@ -159,7 +159,7 @@ const Home = () => {
                         </div>
                       ))}
                     </div>
-                  )}
+                  {/* )} */}
                 </div>
               </div>
             </Drawer.Content>
