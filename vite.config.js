@@ -14,7 +14,7 @@ export default defineConfig({
         start_url: "/",
         icons: [
           {
-            src: "/assets/bt.png",
+            src: "/icons/bt.png",
             sizes: "512x512",
             type: "image/png",
             purpose: "any maskable"
