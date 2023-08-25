@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
-import ReactMapGL, { Marker, NavigationControl } from "react-map-gl";
+import ReactMapGL, {
+  Marker,
+  NavigationControl,
+  GeolocateControl,
+} from "react-map-gl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBus } from "@fortawesome/free-solid-svg-icons";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -16,6 +20,27 @@ export default function Map() {
   });
 
   useEffect(() => {
+    const fetchDataAndUpdateMarkers = () => {
+      fetch("https://bt-server.onrender.com/payloads")
+        .then((response) => response.json())
+        .then((data) => {
+          const payload = data[data.length - 1];
+          const { latitude, longitude } =
+            payload.uplink_message.decoded_payload;
+          setMarkers([{ latitude, longitude }]);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+          setIsLoading(false);
+        });
+    };
+    fetchDataAndUpdateMarkers();
+    const interval = setInterval(fetchDataAndUpdateMarkers, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
     fetch("https://bt-server.onrender.com/payloads")
       .then((response) => response.json())
       .then((data) => {
@@ -29,26 +54,6 @@ export default function Map() {
         setIsLoading(false);
       });
   }, []);
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(successLocation, errorLocation, {
-      enableHighAccuracy: true,
-    });
-  }, []);
-
-  function successLocation(position) {
-    const { latitude, longitude } = position.coords;
-    setMarkers((prevMarkers) => [...prevMarkers, { latitude, longitude }]);
-    setViewport((prevViewport) => ({
-      ...prevViewport,
-      latitude,
-      longitude,
-    }));
-  }
-
-  function errorLocation(position) {
-    console.log("Error getting location:", position);
-  }
 
   function handleMapLoad() {
     setIsLoading(false);
@@ -85,6 +90,7 @@ export default function Map() {
               key={index}
               latitude={mark.latitude}
               longitude={mark.longitude}
+              anchor={"bottom"}
             >
               <div className="marker">
                 <FontAwesomeIcon
@@ -103,6 +109,10 @@ export default function Map() {
               }}
               showCompass={true}
             />
+          </div>
+
+          <div className="absolute top-[8rem] right-[2.8rem]  z-10">
+            <GeolocateControl />
           </div>
         </ReactMapGL>
       </div>

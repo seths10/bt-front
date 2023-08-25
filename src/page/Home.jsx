@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Map } from "../components";
 import { Drawer } from "vaul";
-import { MdClose, MdLocationPin } from "react-icons/md";
+import { MdBusAlert, MdClose, MdLocationPin } from "react-icons/md";
 import { MdDirectionsBus } from "react-icons/md";
 import { Link } from "react-router-dom";
 
@@ -95,14 +95,16 @@ const Home = () => {
               <div className="fixed bottom-9 right-3 border border-gray-200 shadow-lg rounded-full">
                 <div className="bg-white rounded-full p-3">
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 text-gray-700"
-                    viewBox="0 0 20 20"
+                    
+                    className="h-5 w-5 text-black"
+                    viewBox="0 0 13 16"
                     fill="currentColor"
                   >
-                    <path d="M9.999 15.333a5.333 5.333 0 110-10.666 5.333 5.333 0 010 10.666zm0-8a2.666 2.666 0 100 5.333 2.666 2.666 0 000-5.333zM10 2a8 8 0 100 16 8 8 0 000-16z" />
+                    <MdBusAlert className="w-6 h-6" />
+                    {/* <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-4-8h8v2H8v-2z" /> */}
                   </svg>
-                  {/* <MdOutlineMap className="w-5 h-6" /> */}
+
+                  
                 </div>
               </div>
             </div>
