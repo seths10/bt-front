@@ -16,7 +16,9 @@ export default function Map() {
   });
 
   useEffect(() => {
-    fetch("https://bt-server.onrender.com/payloads")
+    fetch("https://bt-server.onrender.com/payloads", {
+      mode: "no-cors",
+    })
       .then((response) => response.json())
       .then((data) => {
         const payload = data[data.length - 1];
@@ -80,8 +82,6 @@ export default function Map() {
           maxZoom={30}
           mapStyle="mapbox://styles/mapbox/satellite-streets-v9"
         >
-          
-
           {markers.map((mark, index) => (
             <Marker
               key={index}
