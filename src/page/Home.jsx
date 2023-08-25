@@ -37,9 +37,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetch("https://bt-server.onrender.com/payloads", {
-      mode: "no-cors",
-    })
+    fetch("https://bt-server.onrender.com/payloads")
       .then((response) => response.json())
       .then((data) => {
         const lastTwo = data.slice(-2);

@@ -16,9 +16,7 @@ export default function Map() {
   });
 
   useEffect(() => {
-    fetch("https://bt-server.onrender.com/payloads", {
-      mode: "no-cors",
-    })
+    fetch("https://bt-server.onrender.com/payloads")
       .then((response) => response.json())
       .then((data) => {
         const payload = data[data.length - 1];
