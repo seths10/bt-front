@@ -97,29 +97,24 @@ const About = () => {
                 </h2>
                 <p className="mb-3 text-gray-500 ">
                   This was developed to provide proper management of time for
-                  students on campus
+                  students on campus.
                 </p>
-                <a
-                  href="#"
-                  className="inline-flex items-center font-medium text-blue-600 hover:text-blue-800"
-                >
-                  Learn more
-                  <svg
-                    className="w-2.5 h-2.5 ml-2"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 6 10"
+
+                <div className="flex flex-col justify-between">
+                  Made with ♥ by: <br />
+                  <a
+                    href="https://github.com/seths10"
+                    className="inline-flex items-center font-medium text-blue-600 hover:text-blue-800"
                   >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m1 9 4-4-4-4"
-                    />
-                  </svg>
-                </a>
+                    Seth Addo
+                  </a>
+                  <a
+                    href="https://github.com/shineteye"
+                    className="inline-flex items-center font-medium text-blue-600 hover:text-blue-800"
+                  >
+                    Shine Teye
+                  </a>
+                </div>
               </div>
               <div
                 className={` p-4 bg-white rounded-lg md:p-8  ${
@@ -157,11 +152,9 @@ const About = () => {
                     >
                       <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
                     </svg>
-                    <span className="leading-tight">
-                      Estimated Time for Arrival
-                    </span>
+                    <span className="leading-tight">Location of shuttles</span>
                   </li>
-                  <li className="flex space-x-2 items-center">
+                  {/* <li className="flex space-x-2 items-center">
                     <svg
                       className="flex-shrink-0 w-3.5 h-3.5 text-blue-600"
                       aria-hidden="true"
@@ -171,8 +164,8 @@ const About = () => {
                     >
                       <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
                     </svg>
-                    <span className="leading-tight">Nice UI</span>
-                  </li>
+                    <span className="leading-tight">Nice User Interface</span>
+                  </li> */}
                   <li className="flex space-x-2 items-center">
                     <svg
                       className="flex-shrink-0 w-3.5 h-3.5 text-blue-600 "
@@ -186,6 +179,28 @@ const About = () => {
                     <span className="leading-tight">Easy to Use</span>
                   </li>
                 </ul>
+
+                <a
+                  href="https://github.com/seths10/bt-front"
+                  className="inline-flex items-center mt-4 font-medium text-blue-600 hover:text-blue-800"
+                >
+                  Learn more
+                  <svg
+                    className="w-2.5 h-2.5 ml-2"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 6 10"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 9 4-4-4-4"
+                    />
+                  </svg>
+                </a>
               </div>
               <div
                 className={` p-4 bg-white rounded-lg md:p-8  ${
@@ -204,10 +219,10 @@ const About = () => {
                     <dt className="mb-2 text-3xl font-extrabold">100+</dt>
                     <dd className="text-gray-500 ">Students have used this</dd>
                   </div>
-                  <div className="flex flex-col">
+                  {/* <div className="flex flex-col">
                     <dt className="mb-2 text-3xl font-extrabold">0</dt>
                     <dd className="text-gray-500 ">Issues</dd>
-                  </div>
+                  </div> */}
                 </dl>
               </div>
             </div>

@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 const Home = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [deviceInfo, setDeviceInfo] = useState([]);
-  const [remainingTime, setRemainingTime] = useState(600);
 
   const toggleDialog = () => {
     setIsDialogOpen(!isDialogOpen);
@@ -37,49 +36,29 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetch("https://bt-server.onrender.com/payloads")
-      .then((response) => response.json())
-      .then((data) => {
-        const lastTwo = data.slice(-2);
-        if (
-          lastTwo.length === 2 &&
-          lastTwo[0].end_device_ids.dev_addr ===
-            lastTwo[1].end_device_ids.dev_addr
-        ) {
-          setDeviceInfo([lastTwo[0]]);
-        } else {
-          setDeviceInfo(lastTwo.reverse());
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  }, []);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const updateRemainingTime = () => {
-    if (remainingTime === 0) {
-      setRemainingTime(600);
-      setDeviceInfo([]);
-    } else {
-      setRemainingTime((prevTime) => prevTime - 1);
-    }
-  };
-
-  useEffect(() => {
-    const updateIntervalId = setInterval(updateRemainingTime, 1000);
-    const clearIntervalId = setInterval(() => {
-      setDeviceInfo([]);
-    }, 60000);
-
-    return () => {
-      clearInterval(updateIntervalId);
-      clearInterval(clearIntervalId);
+    const fetchDataAndUpdateMarkers = () => {
+      fetch("https://bt-server.onrender.com/payloads")
+        .then((response) => response.json())
+        .then((data) => {
+          const lastTwo = data.slice(-2);
+          if (
+            lastTwo.length === 2 &&
+            lastTwo[0].end_device_ids.dev_addr ===
+              lastTwo[1].end_device_ids.dev_addr
+          ) {
+            setDeviceInfo([lastTwo[0]]);
+          } else {
+            setDeviceInfo(lastTwo.reverse());
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching data:", error);
+        });
     };
-  }, [updateRemainingTime]);
-
-  const minutes = Math.floor(remainingTime / 60);
-  const seconds = remainingTime % 60;
+    fetchDataAndUpdateMarkers();
+    const interval = setInterval(fetchDataAndUpdateMarkers, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <section>
@@ -95,7 +74,6 @@ const Home = () => {
               <div className="fixed bottom-9 right-3 border border-gray-200 shadow-lg rounded-full">
                 <div className="bg-white rounded-full p-3">
                   <svg
-                    
                     className="h-5 w-5 text-black"
                     viewBox="0 0 13 16"
                     fill="currentColor"
@@ -103,8 +81,6 @@ const Home = () => {
                     <MdBusAlert className="w-6 h-6" />
                     {/* <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-4-8h8v2H8v-2z" /> */}
                   </svg>
-
-                  
                 </div>
               </div>
             </div>
@@ -116,7 +92,7 @@ const Home = () => {
                 <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-3" />
                 <div className="max-w-md mx-auto">
                   <Drawer.Title className="font-bold mb-2">
-                    Nearest Shuttles
+                    Available Shuttles
                   </Drawer.Title>
 
                   {deviceInfo?.length === 0 ? (
@@ -146,15 +122,12 @@ const Home = () => {
                                   </p>
                                   <div className="flex items-center gap-1 text-sm text-gray-400">
                                     <MdLocationPin />
-                                    <p>Science Shuttle</p>
+                                    <p>UCC Campus</p>
                                   </div>
                                 </div>
                                 <div className="inline-flex justify-center border border-dashed border-gray-200 rounded-full px-2 text-white items-center text-base">
-                                  <p className="text-xs">ETA:</p>
-                                  <p className="font-bold text-sm ml-2">
-                                    {minutes}:
-                                    {seconds < 10 ? `0${seconds}` : seconds}
-                                  </p>
+                                  {/* <p className="text-xs">ETA:</p> */}
+                                  <p className="font-bold text-sm">Aayalolo</p>
                                 </div>
                               </div>
                             </div>

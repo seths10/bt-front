@@ -24,10 +24,24 @@ export default function Map() {
       fetch("https://bt-server.onrender.com/payloads")
         .then((response) => response.json())
         .then((data) => {
-          const payload = data[data.length - 1];
-          const { latitude, longitude } =
-            payload.uplink_message.decoded_payload;
-          setMarkers([{ latitude, longitude }]);
+          const uniqueDevices = new Set();
+          const newMarkers = [];
+
+          for (let i = data.length - 1; i >= 0; i--) {
+            const payload = data[i];
+            const deviceAddr = payload.end_device_ids.dev_addr;
+            if (!uniqueDevices.has(deviceAddr) && newMarkers.length < 2) {
+              uniqueDevices.add(deviceAddr);
+              const { latitude, longitude } =
+                payload.uplink_message.decoded_payload;
+              newMarkers.push({ latitude, longitude });
+            }
+
+            if (newMarkers.length === 2) {
+              break;
+            }
+          }
+          setMarkers(newMarkers);
           setIsLoading(false);
         })
         .catch((error) => {
@@ -35,7 +49,7 @@ export default function Map() {
           setIsLoading(false);
         });
     };
-    fetchDataAndUpdateMarkers();
+
     const interval = setInterval(fetchDataAndUpdateMarkers, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -75,7 +89,6 @@ export default function Map() {
               key={index}
               latitude={mark.latitude}
               longitude={mark.longitude}
-              anchor={"bottom"}
             >
               <div className="marker">
                 <FontAwesomeIcon
@@ -97,7 +110,7 @@ export default function Map() {
           </div>
 
           <div className="absolute top-[8rem] right-[2.8rem]  z-10">
-            <GeolocateControl />
+            <GeolocateControl positionOptions={{ enableHighAccuracy: true }} />
           </div>
         </ReactMapGL>
       </div>
