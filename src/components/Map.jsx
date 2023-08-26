@@ -40,21 +40,6 @@ export default function Map() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    fetch("https://bt-server.onrender.com/payloads")
-      .then((response) => response.json())
-      .then((data) => {
-        const payload = data[data.length - 1];
-        const { latitude, longitude } = payload.uplink_message.decoded_payload;
-        setMarkers([{ latitude, longitude }]);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setIsLoading(false);
-      });
-  }, []);
-
   function handleMapLoad() {
     setIsLoading(false);
   }
