@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import { Map } from "../components";
 import { Drawer } from "vaul";
@@ -5,7 +6,7 @@ import { MdBusAlert, MdClose, MdLocationPin } from "react-icons/md";
 import { MdDirectionsBus } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-const Home = () => {
+const Home = ({ userProfile }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [deviceInfo, setDeviceInfo] = useState([]);
 
@@ -16,12 +17,14 @@ const Home = () => {
   const renderAboutLink = () => {
     if (window.innerWidth <= 640) {
       return (
-        <button
-          onClick={toggleDialog}
-          className="font-bold rounded-lg h-8 shadow-md text-black bg-white px-3 py-4 flex items-center"
-        >
-          ?
-        </button>
+        <div>
+          <img
+            src={userProfile?.profilePictureUrl}
+            alt={userProfile?.name}
+            onClick={toggleDialog}
+            className=" border border-white rounded-full w-[2.7rem]"
+          />
+        </div>
       );
     } else {
       return (

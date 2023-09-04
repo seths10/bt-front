@@ -1,8 +1,9 @@
+/* eslint-disable react/prop-types */
 import { MdArrowBack } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-const About = () => {
+const About = ({userProfile}) => {
   const [activeTab, setActiveTab] = useState("about");
 
   const handleTabClick = (tabId) => {
@@ -24,6 +25,8 @@ const About = () => {
           <h1 className="font-extrabold text-[#222328] mt-5 text-[32px]">
             About
           </h1>
+
+          <p>Welcome, {userProfile?.name}</p>
 
           <div className="max-w-7xl mx-auto mt-5 w-full bg-white border border-gray-200 rounded-lg shadow">
             <ul
