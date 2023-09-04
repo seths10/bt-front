@@ -12,10 +12,9 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import * as shuttleStations from "../data/stations.json";
 import Loader from "./Loader";
 
+
 export default function Map() {
   const [isLoading, setIsLoading] = useState(true);
-  // const [start, setStart] = useState([-73, 42]);
-  // const [end, setEnd] = useState([-72, 42]);
   const [selectedStation, setSelectedStation] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [viewport, setViewport] = useState({
@@ -64,7 +63,6 @@ export default function Map() {
                   icon: "🚌",
                   duration: 5000,
                   style: {
-                    // border: '1px solid #000',
                     padding: "2px 10px",
                     borderRadius: "10px",
                     marginTop: "20px",

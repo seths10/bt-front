@@ -40,7 +40,7 @@ const App = () => {
           <div>
             
             <div>
-              <button className="mr-4 mt-10 px-3 float-right py-2 bg-red-600 rounded-lg text-white" onClick={() => logout()}>Logout</button>
+              <button className="mr-4 mt-10 text-lg px-3 float-right border py-2 bg-white rounded-lg text-red-600" onClick={() => logout()}>Logout</button>
             </div>
           </div>
         </>
