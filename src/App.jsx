@@ -1,6 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
 import { useAuth, useLoginWithRedirect, ContextHolder } from "@frontegg/react";
+import { Toaster } from 'react-hot-toast';
 import "./App.css";
 import Home from "./page/Home";
 import About from "./page/About";
@@ -26,6 +27,8 @@ const App = () => {
       {isAuthenticated ? (
         <>
           <Splash />
+
+          <Toaster position="top-center"/>
 
           <main>
             <Routes>
