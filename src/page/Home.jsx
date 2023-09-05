@@ -5,6 +5,7 @@ import { Drawer } from "vaul";
 import { MdBusAlert, MdClose, MdLocationPin } from "react-icons/md";
 import { MdDirectionsBus } from "react-icons/md";
 import { Link } from "react-router-dom";
+import { AdminPortal } from "@frontegg/react";
 
 const Home = ({ userProfile }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -12,6 +13,10 @@ const Home = ({ userProfile }) => {
 
   const toggleDialog = () => {
     setIsDialogOpen(!isDialogOpen);
+  };
+
+  const handleClick = () => {
+    AdminPortal.show();
   };
 
   const renderAboutLink = () => {
@@ -71,7 +76,7 @@ const Home = ({ userProfile }) => {
         </div>
 
         <Map />
-        <Drawer.Root shouldScaleBackground>
+        <Drawer.Root shouldScaleBackground >
           <Drawer.Trigger asChild>
             <div>
               <div className="fixed bottom-9 right-3 border border-gray-200 shadow-lg rounded-full">
@@ -90,7 +95,7 @@ const Home = ({ userProfile }) => {
           </Drawer.Trigger>
           <Drawer.Portal>
             <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-            <Drawer.Content className="bg-white flex flex-col overflow-auto max-h-[82vh] rounded-t-[10px] h-[40%] mt-24 fixed bottom-0 left-0 right-0">
+            <Drawer.Content className="bg-white flex flex-col overflow-auto max-h-[82vh] rounded-t-[20px] h-[40%] mt-24 fixed bottom-0 left-0 right-0">
               <div className="p-4 bg-white rounded-t-[10px] flex-1">
                 <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-3" />
                 <div className="max-w-md mx-auto">
@@ -150,20 +155,28 @@ const Home = ({ userProfile }) => {
             onClick={toggleDialog}
             className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
           >
-            <div className="bg-white rounded-xl px-4 pb-3">
+            <div className="bg-white rounded-lg w-[10rem] px-3 pb-2">
               <div className="flex justify-end">
                 <button
                   onClick={toggleDialog}
-                  className="font-inter text-black mt-2 rounded-md block mb-2"
+                  className="font-inter text-black rounded-md block"
                 >
-                  <MdClose className="rounded-md text-gray-400" />
+                  <MdClose className="rounded-md text-white" />
                 </button>
               </div>
-              <p className="whitespace-wrap">Learn more about our app</p>
-              <div className="flex justify-center mt-3 mb-2">
+              <p className="whitespace-wrap"></p>
+              <div className="flex flex-col justify-center mt-1 mb-2">
+                <button
+                  to={"/about"}
+                  className="font-inter mb-2 text-white bg-[#222328] px-3 py-1 rounded-lg"
+                  onClick={handleClick}
+                >
+                  Profile
+                </button>
+
                 <Link
                   to={"/about"}
-                  className="font-inter text-white bg-[#222328] px-3 py-1 rounded-lg"
+                  className="font-inter text-white flex justify-center bg-[#222328] px-3 py-1 rounded-lg"
                   onClick={toggleDialog}
                 >
                   About

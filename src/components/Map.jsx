@@ -7,11 +7,13 @@ import ReactMapGL, {
 } from "react-map-gl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBus, faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { MdLocationPin } from "react-icons/md";
+import { Drawer } from "vaul";
+// import addNotification from "react-push-notification";
 import toast from "react-hot-toast";
 import "mapbox-gl/dist/mapbox-gl.css";
 import * as shuttleStations from "../data/stations.json";
 import Loader from "./Loader";
-
 
 export default function Map() {
   const [isLoading, setIsLoading] = useState(true);
@@ -34,11 +36,10 @@ export default function Map() {
 
           for (let i = data.length - 1; i >= 0; i--) {
             const payload = data[i];
-            const deviceAddr = payload.end_device_ids.dev_addr;
+            const deviceAddr = payload.dev_addr;
             if (!uniqueDevices.has(deviceAddr) && newMarkers.length < 2) {
               uniqueDevices.add(deviceAddr);
-              const { latitude, longitude } =
-                payload.uplink_message.decoded_payload;
+              const { latitude, longitude } = payload;
               newMarkers.push({ latitude, longitude });
             }
 
@@ -81,7 +82,8 @@ export default function Map() {
 
     const interval = setInterval(fetchDataAndUpdateMarkers, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [
+  ]);
 
   function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Radius of the Earth in km
@@ -101,6 +103,16 @@ export default function Map() {
   function handleMapLoad() {
     setIsLoading(false);
   }
+
+  // const sendPushNotification = (stationName) => {
+  //   addNotification({
+  //     title: "UCC Bus Tracking",
+  //     subtitle: "Notice",
+  //     message: `The shuttle is at ${stationName}`,
+  //     theme: "light",
+  //     native: true,
+  //   });
+  // };
 
   return (
     <div>
@@ -194,6 +206,65 @@ export default function Map() {
           <div className="absolute top-[8rem] right-[2.8rem]  z-10">
             <GeolocateControl />
           </div>
+
+          <Drawer.Root shouldScaleBackground>
+            <Drawer.Trigger asChild>
+              <div>
+                <div className="fixed bottom-[6rem] right-3 border border-gray-200 shadow-lg rounded-full">
+                  <div className="bg-white rounded-full p-3">
+                    <svg
+                      className="h-5 w-5 text-black"
+                      viewBox="2 1 11 14"
+                      fill="currentColor"
+                    >
+                      <MdLocationPin className="w-6 h-6" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </Drawer.Trigger>
+            <Drawer.Portal>
+              <Drawer.Overlay className="fixed inset-0 bg-black/40" />
+              <Drawer.Content className="bg-white flex flex-col overflow-auto max-h-[82vh] rounded-t-[20px] h-[40%] mt-24 fixed bottom-0 left-0 right-0">
+                <div className="p-4 bg-white rounded-t-[10px] flex-1">
+                  <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-3" />
+                  <div className="max-w-md mx-auto">
+                    <Drawer.Title className="font-bold mb-2">
+                      Select Pickup Location
+                    </Drawer.Title>
+                    <div>
+                      <div className="flex mt-4 space-x-3 md:mt-6">
+                        <button
+                          onClick={() =>
+                            toast.success("Pickup location selected")
+                          }
+                          className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-black rounded-lg hover:bg-black/80"
+                        >
+                          SRC Hall
+                        </button>
+                        <button
+                          onClick={() =>
+                            toast.success("Pickup location selected")
+                          }
+                          className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100"
+                        >
+                          Old Site
+                        </button>
+                        <button
+                          onClick={() =>
+                            toast.success("Pickup location selected")
+                          }
+                          className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100"
+                        >
+                          Science Shuttle Station
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Drawer.Content>
+            </Drawer.Portal>
+          </Drawer.Root>
         </ReactMapGL>
       </div>
     </div>
