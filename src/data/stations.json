@@ -7,16 +7,16 @@
       "name": "Old Site"
     },
     {
-      "id": 2,
-      "latitude": 5.117007402533936,
-      "longitude": -1.2922557915640862,
-      "name": "Science Shuttle Station"
-    },
-    {
       "id": 3,
       "latitude": 5.1340199385826155,
       "longitude": -1.2868718725283357,
       "name": "SRC Hall"
+    },
+    {
+      "id": 2,
+      "latitude": 5.117007402533936,
+      "longitude": -1.2922557915640862,
+      "name": "Science Shuttle Station"
     }
   ]
 }

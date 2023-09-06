@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBus, faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { MdLocationPin } from "react-icons/md";
 import { Drawer } from "vaul";
-// import addNotification from "react-push-notification";
+import addNotification from "react-push-notification";
 import toast from "react-hot-toast";
 import "mapbox-gl/dist/mapbox-gl.css";
 import * as shuttleStations from "../data/stations.json";
@@ -18,6 +18,7 @@ import Loader from "./Loader";
 export default function Map() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedStation, setSelectedStation] = useState(null);
+  const [notificationSent, setNotificationSent] = useState(null);
   const [markers, setMarkers] = useState([]);
   const [viewport, setViewport] = useState({
     latitude: 5.1154645,
@@ -36,10 +37,10 @@ export default function Map() {
 
           for (let i = data.length - 1; i >= 0; i--) {
             const payload = data[i];
-            const deviceAddr = payload.dev_addr;
+            const deviceAddr = payload.deviceName;
             if (!uniqueDevices.has(deviceAddr) && newMarkers.length < 2) {
               uniqueDevices.add(deviceAddr);
-              const { latitude, longitude } = payload;
+              const { latitude, longitude } = payload.decodedPayload;
               newMarkers.push({ latitude, longitude });
             }
 
@@ -60,6 +61,10 @@ export default function Map() {
               );
 
               if (distance < 0.1) {
+                {
+                  notificationSent && sendPushNotification(station.name);
+                }
+
                 toast(`Bus is close to ${station.name}`, {
                   icon: "🚌",
                   duration: 5000,
@@ -80,10 +85,9 @@ export default function Map() {
         });
     };
 
-    const interval = setInterval(fetchDataAndUpdateMarkers, 5000);
+    const interval = setInterval(fetchDataAndUpdateMarkers, 3000);
     return () => clearInterval(interval);
-  }, [
-  ]);
+  }, [notificationSent]);
 
   function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Radius of the Earth in km
@@ -104,15 +108,24 @@ export default function Map() {
     setIsLoading(false);
   }
 
-  // const sendPushNotification = (stationName) => {
-  //   addNotification({
-  //     title: "UCC Bus Tracking",
-  //     subtitle: "Notice",
-  //     message: `The shuttle is at ${stationName}`,
-  //     theme: "light",
-  //     native: true,
-  //   });
-  // };
+  const sendPushNotification = (stationName) => {
+    addNotification({
+      title: "UCC Bus Tracking",
+      subtitle: "Notice",
+      message: `The shuttle is at ${stationName}`,
+      theme: "light",
+      native: true,
+    });
+  };
+
+  const handleStationButtonClick = (station) => {
+    toast.success(() => (
+      <span>
+        Pickup location set to <b>{station.name}</b>
+      </span>
+    ));
+    setNotificationSent(station.name);
+  };
 
   return (
     <div>
@@ -204,7 +217,11 @@ export default function Map() {
           </div>
 
           <div className="absolute top-[8rem] right-[2.8rem]  z-10">
-            <GeolocateControl />
+            <GeolocateControl
+              positionOptions={{ enableHighAccuracy: true }}
+              showUserLocation
+              showAccuracyCircle
+            />
           </div>
 
           <Drawer.Root shouldScaleBackground>
@@ -225,41 +242,39 @@ export default function Map() {
             </Drawer.Trigger>
             <Drawer.Portal>
               <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-              <Drawer.Content className="bg-white flex flex-col overflow-auto max-h-[82vh] rounded-t-[20px] h-[40%] mt-24 fixed bottom-0 left-0 right-0">
+              <Drawer.Content className="bg-white flex flex-col rounded-t-[20px] h-[40%] mt-24 fixed bottom-0 left-0 right-0">
                 <div className="p-4 bg-white rounded-t-[10px] flex-1">
                   <div className="mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-300 mb-3" />
                   <div className="max-w-md mx-auto">
-                    <Drawer.Title className="font-bold mb-2">
+                    <Drawer.Title className="font-bold mb-2 text-lg">
                       Select Pickup Location
                     </Drawer.Title>
                     <div>
                       <div className="flex mt-4 space-x-3 md:mt-6">
-                        <button
-                          onClick={() =>
-                            toast.success("Pickup location selected")
-                          }
-                          className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-black rounded-lg hover:bg-black/80"
-                        >
-                          SRC Hall
-                        </button>
-                        <button
-                          onClick={() =>
-                            toast.success("Pickup location selected")
-                          }
-                          className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100"
-                        >
-                          Old Site
-                        </button>
-                        <button
-                          onClick={() =>
-                            toast.success("Pickup location selected")
-                          }
-                          className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100"
-                        >
-                          Science Shuttle Station
-                        </button>
+                        {shuttleStations.stations.map((station, index) => (
+                          <button
+                            key={index}
+                            onClick={() => handleStationButtonClick(station)}
+                            className={`inline-flex items-center px-2 py-2 whitespace-nowrap overflow text-sm font-semibold text-center ${
+                              notificationSent === station.name
+                                ? "text-white bg-black rounded-lg hover:bg-black/80"
+                                : "text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100"
+                            }`}
+                          >
+                            {station.name}
+                          </button>
+                        ))}
                       </div>
                     </div>
+
+                    <button
+                      onClick={() => {
+                        setNotificationSent(null);
+                      }}
+                      className="inline-flex items-center mt-5 pl-2 underline py-2 text-sm font-medium text-center text-red-600 bg-white hover:text-red-800"
+                    >
+                      Clear Selection
+                    </button>
                   </div>
                 </div>
               </Drawer.Content>
