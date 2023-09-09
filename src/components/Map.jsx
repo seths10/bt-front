@@ -16,6 +16,7 @@ import * as shuttleStations from "../data/stations.json";
 import Loader from "./Loader";
 
 export default function Map() {
+  const NUM_OF_NODES = 2;
   const [isLoading, setIsLoading] = useState(true);
   const [selectedStation, setSelectedStation] = useState(null);
   const [notificationSent, setNotificationSent] = useState(null);
@@ -38,13 +39,16 @@ export default function Map() {
           for (let i = data.length - 1; i >= 0; i--) {
             const payload = data[i];
             const deviceAddr = payload.deviceName;
-            if (!uniqueDevices.has(deviceAddr) && newMarkers.length < 2) {
+            if (
+              !uniqueDevices.has(deviceAddr) &&
+              newMarkers.length < NUM_OF_NODES
+            ) {
               uniqueDevices.add(deviceAddr);
               const { latitude, longitude } = payload.decodedPayload;
               newMarkers.push({ latitude, longitude });
             }
 
-            if (newMarkers.length === 2) {
+            if (newMarkers.length === NUM_OF_NODES) {
               break;
             }
           }
