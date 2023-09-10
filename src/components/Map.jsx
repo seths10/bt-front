@@ -277,8 +277,12 @@ export default function Map() {
                       }}
                       className="inline-flex items-center mt-5 pl-2 underline py-2 text-sm font-medium text-center text-red-600 bg-white hover:text-red-800"
                     >
-                      Clear Selection
+                      Cancel Reminder
                     </button>
+
+                    <div className="bg-gray-200 mt-3 px-3 py-2 rounded">
+                      <p className="text-xs"><span className="font-bold">Note: </span>you can select a location to set a reminder when the bus gets to that location</p>
+                    </div>
                   </div>
                 </div>
               </Drawer.Content>

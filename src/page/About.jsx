@@ -1,13 +1,19 @@
 /* eslint-disable react/prop-types */
 import { MdArrowBack } from "react-icons/md";
+import { ContextHolder } from "@frontegg/react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-const About = ({userProfile}) => {
+const About = ({ userProfile }) => {
   const [activeTab, setActiveTab] = useState("about");
 
   const handleTabClick = (tabId) => {
     setActiveTab(tabId);
+  };
+
+  const logout = () => {
+    const baseUrl = ContextHolder.getContext().baseUrl;
+    window.location.href = `${baseUrl}/oauth/logout?post_logout_redirect_uri=${window.location}`;
   };
 
   return (
@@ -229,6 +235,17 @@ const About = ({userProfile}) => {
                 </dl>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div>
+          <div>
+            <button
+              className="mr-4 mt-10 text-lg px-3 float-right border py-2 bg-white rounded-lg text-red-600"
+              onClick={() => logout()}
+            >
+              Logout
+            </button>
           </div>
         </div>
       </section>
