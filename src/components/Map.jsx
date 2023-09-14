@@ -21,6 +21,7 @@ export default function Map() {
   const [selectedStation, setSelectedStation] = useState(null);
   const [notificationSent, setNotificationSent] = useState(null);
   const [markers, setMarkers] = useState([]);
+  const [toastShown, setToastShown] = useState({});
   const [viewport, setViewport] = useState({
     latitude: 5.1154645,
     longitude: -1.2908544,
@@ -64,10 +65,13 @@ export default function Map() {
                 station.longitude
               );
 
-              if (distance < 0.1) {
-                {
-                  notificationSent && sendPushNotification(station.name);
-                }
+              if (distance < 0.1 && !toastShown[station.name]) {
+                setToastShown((prevToastShown) => ({
+                  ...prevToastShown,
+                  [station.name]: true,
+                }));
+
+                sendPushNotification(station.name);
 
                 toast(`Bus is close to ${station.name}`, {
                   icon: "🚌",
@@ -89,9 +93,16 @@ export default function Map() {
         });
     };
 
+    const cleanToastInterval = setInterval(() => {
+      setToastShown({});
+    }, 300000);
     const interval = setInterval(fetchDataAndUpdateMarkers, 3000);
-    return () => clearInterval(interval);
-  }, [notificationSent]);
+    
+    return () => {
+      clearInterval(interval);
+      clearInterval(cleanToastInterval);
+    };
+  }, [notificationSent, toastShown]);
 
   function calculateDistance(lat1, lon1, lat2, lon2) {
     const R = 6371; // Radius of the Earth in km
@@ -281,7 +292,11 @@ export default function Map() {
                     </button>
 
                     <div className="bg-gray-200 mt-3 px-3 py-2 rounded">
-                      <p className="text-xs"><span className="font-bold">Note: </span>you can select a location to set a reminder when the bus gets to that location</p>
+                      <p className="text-xs">
+                        <span className="font-bold">Note: </span>you can select
+                        a location to set a reminder when the bus gets to that
+                        location
+                      </p>
                     </div>
                   </div>
                 </div>
