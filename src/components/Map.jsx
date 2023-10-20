@@ -166,7 +166,7 @@ export default function Map() {
           minZoom={5}
           onLoad={handleMapLoad}
           maxZoom={30}
-          mapStyle="mapbox://styles/mapbox/standard-beta"
+          mapStyle="mapbox://styles/mapbox/streets-v11"
         >
           {markers.map((mark, index) => (
             <Marker
